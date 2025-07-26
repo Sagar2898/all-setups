@@ -1,11 +1,13 @@
-amazon-linux-extras install java-openjdk11 -y
-wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.86/bin/apache-tomcat-9.0.90.tar.gz
-tar -zxvf apache-tomcat-9.0.90.tar.gz
-sed -i '56  a\<role rolename="manager-gui"/>' apache-tomcat-9.0.90/conf/tomcat-users.xml
-sed -i '57  a\<role rolename="manager-script"/>' apache-tomcat-9.0.90/conf/tomcat-users.xml
-sed -i '58  a\<user username="tomcat" password="sagar123" roles="manager-gui, manager-script"/>' apache-tomcat-9.0.90/conf/tomcat-users.xml
-sed -i '59  a\</tomcat-users>' apache-tomcat-9.0.90/conf/tomcat-users.xml
-sed -i '56d' apache-tomcat-9.0.90/conf/tomcat-users.xml
-sed -i '21d' apache-tomcat-9.0.90/webapps/manager/META-INF/context.xml
-sed -i '22d'  apache-tomcat-9.0.90/webapps/manager/META-INF/context.xml
-sh apache-tomcat-9.0.90/bin/startup.sh
+sudo dnf install java-11-amazon-corretto -y
+wget https://downloads.apache.org/tomcat/tomcat-10/v10.1.43/bin/apache-tomcat-10.1.43.tar.gz
+tar -zxvf apache-tomcat-10.1.43.tar.gz
+vim apache-tomcat-10.1.43/conf/tomcat-users.xml
+#inside the file
+<role rolename="manager-gui"/>
+<role rolename="manager-script"/>
+<user username="tomcat" password="sagar123>" roles="manager-gui, manager-script"/>
+vim apache-tomcat-10.1.43/webapps/manager/META-INF/context.xml
+#uncommand or delete 21,22 line
+vim apache-tomcat-10.1.43/webapps/manager/META-INF/context.xml
+sh apache-tomcat-10.1.43/bin/startup.sh
+#the copy-public port number :8080
