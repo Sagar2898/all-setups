@@ -1,15 +1,34 @@
-#! /bin/bash
-sudo apt update -y
-sudo apt install -y maven openjdk-17-jdk
-java -version
-curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
-  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+#!/bin/bash
 
-echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
-  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
-  /etc/apt/sources.list.d/jenkins.list > /dev/null
-sudo apt update -y
-sudo apt install -y jenkins
+# Update system packages
+sudo dnf update -y
+
+# Install Java 17 (OpenJDK)
+sudo dnf install -y java-17-amazon-corretto
+
+# Verify Java installation
+java -version
+
+# Add Jenkins repository and import GPG key
+sudo curl --silent --location https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key | sudo tee /etc/pki/rpm-gpg/RPM-GPG-KEY-jenkins.io > /dev/null
+
+sudo tee /etc/yum.repos.d/jenkins.repo > /dev/null <<EOF
+[jenkins]
+name=Jenkins-stable
+baseurl=https://pkg.jenkins.io/redhat-stable
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-jenkins.io
+EOF
+
+# Update DNF and install Jenkins
+sudo dnf upgrade -y
+sudo dnf install -y jenkins
+
+# Enable and start Jenkins service
+sudo systemctl enable jenkins
 sudo systemctl start jenkins
+
+# Check Jenkins status
 sudo systemctl status jenkins
+
 
